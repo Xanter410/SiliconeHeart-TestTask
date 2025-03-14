@@ -1,33 +1,38 @@
 using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 using Utils.ServiceLocator;
 
-public class BuildingDataService : IService
+namespace SiliconeHeart.Data
 {
-    private Dictionary<string, BuildingData> _buildingsDataMap;
-    private List<BuildingData> _buildingsData;
-    public BuildingDataService(List<BuildingData> buildingsData)
+    public class BuildingDataService : IService
     {
-        _buildingsData = buildingsData;
-
-        _buildingsDataMap = new Dictionary<string, BuildingData>();
-
-        foreach (var buildingData in _buildingsData)
+        private Dictionary<string, BuildingData> _buildingsDataMap;
+        private List<BuildingData> _buildingsData;
+        public BuildingDataService()
         {
-            _buildingsDataMap[buildingData.Id] = buildingData;
-        }
-    }
+            _buildingsData = Resources.LoadAll<BuildingData>("BuildingData/").ToList();
 
-    public BuildingData GetBuildingDataByID(string id)
-    {
-        if (_buildingsDataMap.ContainsKey(id))
+            _buildingsDataMap = new Dictionary<string, BuildingData>();
+
+            foreach (var buildingData in _buildingsData)
+            {
+                _buildingsDataMap[buildingData.Id] = buildingData;
+            }
+        }
+
+        public BuildingData GetBuildingDataByID(string id)
         {
-            return _buildingsDataMap[id];
+            if (_buildingsDataMap.ContainsKey(id))
+            {
+                return _buildingsDataMap[id];
+            }
+            return null;
         }
-        return null;
-    }
 
-    public List<BuildingData> GetAllBuildingsData()
-    {
-        return _buildingsData;
+        public List<BuildingData> GetAllBuildingsData()
+        {
+            return _buildingsData;
+        }
     }
 }

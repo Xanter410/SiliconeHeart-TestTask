@@ -2,7 +2,6 @@ using UnityEngine;
 using System.IO;
 using System;
 using Unity.Plastic.Newtonsoft.Json;
-using Utils.ServiceLocator;
 
 namespace SiliconeHeart.Save
 {

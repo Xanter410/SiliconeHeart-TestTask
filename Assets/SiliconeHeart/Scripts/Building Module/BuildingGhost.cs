@@ -1,64 +1,68 @@
+using SiliconeHeart.Data;
 using SiliconeHeart.Grid;
+using SiliconeHeart.Input;
 using UnityEngine;
+using Utils.ServiceLocator;
 
-public class BuildingGhost : MonoBehaviour
+namespace SiliconeHeart.Building
 {
-    [SerializeField] private Material _validMaterial;
-    [SerializeField] private Material _invalidMaterial;
-
-    public bool IsValid => _isValid;
-    private bool _isValid;
-
-    private BuildingData _currentBuildingData;
-    private SpriteRenderer _renderer;
-
-    public void Initialize(BuildingData data)
+    public class BuildingGhost : MonoBehaviour
     {
-        _renderer = GetComponent<SpriteRenderer>();
+        [SerializeField] private Material _validMaterial;
+        [SerializeField] private Material _invalidMaterial;
+        public bool IsValid { get; private set; }
 
-        _currentBuildingData = data;
+        private BuildingData _currentBuildingData;
+        private SpriteRenderer _renderer;
 
-        _renderer.sprite = _currentBuildingData.BuildingGhostSprite;
-
-        InputHandler inputHandler = ServiceLocator.Current.Get<InputHandler>();
-
-        inputHandler.mouseMoved += UpdatePosition;
-
-        UpdatePosition(inputHandler.GetMousePosition());
-    }
-
-    private void OnDestroy()
-    {
-        InputHandler inputHandler = ServiceLocator.Current.Get<InputHandler>();
-
-        inputHandler.mouseMoved -= UpdatePosition;
-    }
-
-    private void UpdatePosition(Vector2 move)
-    {
-        var gridService = ServiceLocator.Current.Get<GridService>();
-
-        Vector2 worldPos = Camera.main.ScreenToWorldPoint(move);
-
-        Vector2Int gridPos = gridService.WorldToGridPosition(worldPos);
-
-        Vector2 NewPosition = new Vector2(
-            Mathf.RoundToInt(gridPos.x * gridService.GridCellSize),
-            Mathf.RoundToInt(gridPos.y * gridService.GridCellSize)
-            );
-
-        if ((Vector2)transform.position != NewPosition)
+        public void Initialize(BuildingData data)
         {
-            transform.position = NewPosition;
+            _renderer = GetComponent<SpriteRenderer>();
 
-            _isValid = gridService.IsAreaFree(gridPos, _currentBuildingData.Size);
+            _currentBuildingData = data;
 
-            SetValidity();
-        }        
-    }
+            _renderer.sprite = _currentBuildingData.BuildingGhostSprite;
 
-    public void SetValidity()
-    {
-        _renderer.material = _isValid ? _validMaterial : _invalidMaterial;
+            InputHandler inputHandler = ServiceLocator.Current.Get<InputHandler>();
+
+            inputHandler.mouseMoved += UpdatePosition;
+
+            UpdatePosition(inputHandler.GetMousePosition());
+        }
+
+        private void OnDestroy()
+        {
+            InputHandler inputHandler = ServiceLocator.Current.Get<InputHandler>();
+
+            inputHandler.mouseMoved -= UpdatePosition;
+        }
+
+        private void UpdatePosition(Vector2 move)
+        {
+            var gridService = ServiceLocator.Current.Get<GridService>();
+
+            Vector2 worldPos = Camera.main.ScreenToWorldPoint(move);
+
+            Vector2Int gridPos = gridService.WorldToGridPosition(worldPos);
+
+            Vector2 NewPosition = new Vector2(
+                Mathf.RoundToInt(gridPos.x * gridService.GridCellSize),
+                Mathf.RoundToInt(gridPos.y * gridService.GridCellSize)
+                );
+
+            if ((Vector2)transform.position != NewPosition)
+            {
+                transform.position = NewPosition;
+
+                IsValid = gridService.IsAreaFree(gridPos, _currentBuildingData.Size);
+
+                SetValidity();
+            }
+        }
+
+        public void SetValidity()
+        {
+            _renderer.material = IsValid ? _validMaterial : _invalidMaterial;
+        }
     }
 }

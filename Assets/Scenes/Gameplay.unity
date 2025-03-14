@@ -599,12 +599,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a27c99908fa36e74ebd4581b1044a5ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _uiSystem: {fileID: 1397845232}
+  _uiService: {fileID: 1397845232}
   _buildingSystem: {fileID: 920090142}
-  _buildingsData:
-  - {fileID: 11400000, guid: d6f3decbc6704f44eab6b560d58d8b25, type: 2}
-  - {fileID: 11400000, guid: 493bbe7999edc3b48bffda166696863f, type: 2}
-  - {fileID: 11400000, guid: a02e71d2049b8874ca04830356caedd9, type: 2}
 --- !u!4 &920090141
 Transform:
   m_ObjectHideFlags: 0
@@ -633,9 +629,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _buildingGhostPrefab: {fileID: 4635142630482229486, guid: 493d6278d887f764bb5024dac0e88342, type: 3}
-  _buildingLayerMask:
-    serializedVersion: 2
-    m_Bits: 128
   _tilemapBuildingGrid: {fileID: 1039597791}
   _deletingMarker: {fileID: 920090146}
 --- !u!114 &920090146
@@ -668,7 +661,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1039597792
 Transform:
   m_ObjectHideFlags: 0

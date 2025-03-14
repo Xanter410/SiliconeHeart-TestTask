@@ -1,82 +1,87 @@
 using SiliconeHeart.Grid;
+using SiliconeHeart.Input;
 using UnityEngine;
+using Utils.ServiceLocator;
 
-public class DeletingMarker : MonoBehaviour
+namespace SiliconeHeart.Building
 {
-    [SerializeField] private Material _deletedMaterial;
-
-    private BuildingSystem _buildingManager;
-
-    private Building _currentBuilding;
-    private SpriteRenderer _currentSpriteBuilding;
-    private Material _baseMaterial;
-
-    public void Initialize(BuildingSystem buildingManager)
+    public class DeletingMarker : MonoBehaviour
     {
-        _buildingManager = buildingManager;
-    }
+        [SerializeField] private Material _deletedMaterial;
 
-    private void OnDestroy()
-    {
-        ServiceLocator.Current.Get<InputHandler>().mouseMoved -= CheckPosition;
-    }
+        private BuildingContainer _buildingContainer;
 
-    public void SetEnabled(bool enabled)
-    {
-        if (enabled)
+        private Building _currentBuilding;
+        private SpriteRenderer _currentSpriteBuilding;
+        private Material _baseMaterial;
+
+        public void Initialize(BuildingContainer buildingContainer)
         {
-            ServiceLocator.Current.Get<InputHandler>().mouseMoved += CheckPosition;
+            _buildingContainer = buildingContainer;
         }
-        else
+
+        private void OnDestroy()
         {
             ServiceLocator.Current.Get<InputHandler>().mouseMoved -= CheckPosition;
         }
-    }
 
-    private void CheckPosition(Vector2 move)
-    {
-        var gridSevice = ServiceLocator.Current.Get<GridService>();
-
-        Vector2 worldPos = Camera.main.ScreenToWorldPoint(move);
-
-        Vector2Int gridPos = gridSevice.WorldToGridPosition(worldPos);
-
-        if (gridSevice.TryGetObjectAtGridPosition(gridPos, out object findedBuilding))
+        public void SetEnabled(bool enabled)
         {
-            if ((Building)findedBuilding != _currentBuilding)
+            if (enabled)
             {
-                MarkBuilding((Building)findedBuilding);
+                ServiceLocator.Current.Get<InputHandler>().mouseMoved += CheckPosition;
+            }
+            else
+            {
+                ServiceLocator.Current.Get<InputHandler>().mouseMoved -= CheckPosition;
             }
         }
-        else
+
+        private void CheckPosition(Vector2 move)
+        {
+            var gridSevice = ServiceLocator.Current.Get<GridService>();
+
+            Vector2 worldPos = Camera.main.ScreenToWorldPoint(move);
+
+            Vector2Int gridPos = gridSevice.WorldToGridPosition(worldPos);
+
+            if (gridSevice.TryGetObjectAtGridPosition(gridPos, out object findedBuilding))
+            {
+                if ((Building)findedBuilding != _currentBuilding)
+                {
+                    MarkBuilding((Building)findedBuilding);
+                }
+            }
+            else
+            {
+                UnmarkOldBuilding();
+            }
+        }
+
+        private void MarkBuilding(Building findedBuilding)
         {
             UnmarkOldBuilding();
+
+            _currentBuilding = findedBuilding;
+
+            var gameObject = _buildingContainer.GetGameObjectByBuilding(_currentBuilding);
+
+            _currentSpriteBuilding = gameObject.GetComponent<SpriteRenderer>();
+
+            _baseMaterial = _currentSpriteBuilding.material;
+            _currentSpriteBuilding.material = _deletedMaterial;
         }
-    }
 
-    private void MarkBuilding(Building findedBuilding)
-    {
-        UnmarkOldBuilding();
-
-        _currentBuilding = findedBuilding;
-
-        var gameObject = _buildingManager.GetGameObjectByBuilding(_currentBuilding);
-
-        _currentSpriteBuilding = gameObject.GetComponent<SpriteRenderer>();
-
-        _baseMaterial = _currentSpriteBuilding.material;
-        _currentSpriteBuilding.material = _deletedMaterial;
-    }
-
-    private void UnmarkOldBuilding()
-    {
-        if (_currentSpriteBuilding != null)
+        private void UnmarkOldBuilding()
         {
-            _currentSpriteBuilding.material = _baseMaterial;
+            if (_currentSpriteBuilding != null)
+            {
+                _currentSpriteBuilding.material = _baseMaterial;
 
-            _currentBuilding = null;
-            _currentSpriteBuilding = null;
-            _baseMaterial = null;
+                _currentBuilding = null;
+                _currentSpriteBuilding = null;
+                _baseMaterial = null;
+            }
         }
     }
 }

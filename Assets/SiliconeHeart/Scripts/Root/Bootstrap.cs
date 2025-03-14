@@ -1,15 +1,17 @@
 using System.Collections.Generic;
+using SiliconeHeart.Building;
+using SiliconeHeart.Data;
 using SiliconeHeart.Grid;
+using SiliconeHeart.Input;
 using SiliconeHeart.Save;
+using SiliconeHeart.UI;
 using UnityEngine;
+using Utils.ServiceLocator;
 
 public class Bootstrap : MonoBehaviour
 {
-    [SerializeField] private UIGameplaySystem _uiSystem;
+    [SerializeField] private UIGameplayService _uiService;
     [SerializeField] private BuildingSystem _buildingSystem;
-
-    [SerializeField] private List<BuildingData> _buildingsData;
-
 
     private void Awake()
     {
@@ -18,12 +20,11 @@ public class Bootstrap : MonoBehaviour
         RegisterServices();
 
         InitializeSystems();
-        CreateRelations();
     }
 
     private void ValidateDependencies()
     {
-        if (_uiSystem == null ||
+        if (_uiService == null ||
             _buildingSystem == null
             )
         {
@@ -35,24 +36,20 @@ public class Bootstrap : MonoBehaviour
     {
         ServiceLocator.Initialize();
 
-        ServiceLocator.Current.Register<BuildingDataService>(new BuildingDataService(_buildingsData));
+        ServiceLocator.Current.Register<BuildingDataService>(new BuildingDataService());
 
         ServiceLocator.Current.Register<IStorage>(new JsonToFileStorageService());
 
         ServiceLocator.Current.Register<GridService>(new GridService());
 
         ServiceLocator.Current.Register<InputHandler>(new InputHandler());
+
+        _uiService.Initialize();
+        ServiceLocator.Current.Register<UIGameplayService>(_uiService);
     }
 
     private void InitializeSystems()
     {
         _buildingSystem.Initialize();
-        _uiSystem.Initialize();
-    }
-
-    private void CreateRelations()
-    {
-        _uiSystem.placeButtonClicked += _buildingSystem.TogglePlaceMode;
-        _uiSystem.deleteButtonClicked += _buildingSystem.ToggleDeleteMode;
     }
 }

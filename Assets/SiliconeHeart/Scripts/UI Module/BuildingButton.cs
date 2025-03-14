@@ -1,35 +1,39 @@
+using SiliconeHeart.Data;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BuildingButton : MonoBehaviour
+namespace SiliconeHeart.UI
 {
-    [SerializeField] private Image _buttonImage;
-    [SerializeField] private Image _icon;
-
-    [SerializeField] private Sprite _ButtonBaseImage;
-    [SerializeField] private Sprite _ButtonSelectedImage;
-
-    private Button _button;
-
-    public void Initialize(BuildingData data, System.Action<BuildingData, BuildingButton> callback)
+    public class BuildingButton : MonoBehaviour
     {
-        _icon.sprite = data.Icon;
+        [SerializeField] private Image _buttonImage;
+        [SerializeField] private Image _icon;
 
-        _button = GetComponent<Button>();
-        _button.onClick.AddListener(() => callback?.Invoke(data, this));
+        [SerializeField] private Sprite _ButtonBaseImage;
+        [SerializeField] private Sprite _ButtonSelectedImage;
 
-        SetSelected(false);
-    }
+        private Button _button;
 
-    public void SetSelected(bool state)
-    {
-        if (state == true)
+        public void Initialize(BuildingData data, System.Action<BuildingData, BuildingButton> callback)
         {
-            _buttonImage.sprite = _ButtonSelectedImage;
+            _icon.sprite = data.Icon;
+
+            _button = GetComponent<Button>();
+            _button.onClick.AddListener(() => callback?.Invoke(data, this));
+
+            SetSelected(false);
         }
-        else
+
+        public void SetSelected(bool state)
         {
-            _buttonImage.sprite = _ButtonBaseImage;
+            if (state == true)
+            {
+                _buttonImage.sprite = _ButtonSelectedImage;
+            }
+            else
+            {
+                _buttonImage.sprite = _ButtonBaseImage;
+            }
         }
     }
 }
