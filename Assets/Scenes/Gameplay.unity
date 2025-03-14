@@ -579,9 +579,6 @@ GameObject:
   - component: {fileID: 920090141}
   - component: {fileID: 920090140}
   - component: {fileID: 920090142}
-  - component: {fileID: 920090145}
-  - component: {fileID: 920090144}
-  - component: {fileID: 920090143}
   - component: {fileID: 920090146}
   m_Layer: 0
   m_Name: BootstrapEntryPoint
@@ -602,12 +599,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a27c99908fa36e74ebd4581b1044a5ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _inputHandler: {fileID: 920090145}
-  _uiManager: {fileID: 1397845232}
-  _buildingManager: {fileID: 920090142}
-  _buildingDataService: {fileID: 920090144}
-  _gridSystem: {fileID: 1423425878}
-  _saveManager: {fileID: 920090143}
+  _uiSystem: {fileID: 1397845232}
+  _buildingSystem: {fileID: 920090142}
+  _buildingsData:
+  - {fileID: 11400000, guid: d6f3decbc6704f44eab6b560d58d8b25, type: 2}
+  - {fileID: 11400000, guid: 493bbe7999edc3b48bffda166696863f, type: 2}
+  - {fileID: 11400000, guid: a02e71d2049b8874ca04830356caedd9, type: 2}
 --- !u!4 &920090141
 Transform:
   m_ObjectHideFlags: 0
@@ -641,46 +638,6 @@ MonoBehaviour:
     m_Bits: 128
   _tilemapBuildingGrid: {fileID: 1039597791}
   _deletingMarker: {fileID: 920090146}
---- !u!114 &920090143
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 920090139}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc271da6af9b129469f6547b447a0034, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &920090144
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 920090139}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5e4de89cb3a1fd43a46bf03c73d4cdf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _buildingsData:
-  - {fileID: 11400000, guid: d6f3decbc6704f44eab6b560d58d8b25, type: 2}
-  - {fileID: 11400000, guid: 493bbe7999edc3b48bffda166696863f, type: 2}
-  - {fileID: 11400000, guid: a02e71d2049b8874ca04830356caedd9, type: 2}
---- !u!114 &920090145
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 920090139}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6718f72518611274297af5a1cc6a0c09, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &920090146
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10656,7 +10613,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1423425877}
   - component: {fileID: 1423425876}
-  - component: {fileID: 1423425878}
   m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged
@@ -10693,18 +10649,6 @@ Transform:
   - {fileID: 1651836577}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1423425878
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1423425875}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6887fca354e3963429f6853089cddb40, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1651836576
 GameObject:
   m_ObjectHideFlags: 0

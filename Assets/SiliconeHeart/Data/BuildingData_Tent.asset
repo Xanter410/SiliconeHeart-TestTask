@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93a6cf024fb1ce94298c928edd6fcbb9, type: 3}
   m_Name: BuildingData_Tent
   m_EditorClassIdentifier: 
-  ID: building_tent
+  Id: building_tent
   Prefab: {fileID: 1887898075780522477, guid: dd758b3d27b6aaa469a306214590c57d, type: 3}
   BuildingGhostSprite: {fileID: 21300000, guid: d35c5f2682cb5ed429c2635f9382225f, type: 3}
   Size: {x: 5, y: 4}

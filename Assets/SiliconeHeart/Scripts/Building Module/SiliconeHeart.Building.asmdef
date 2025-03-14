@@ -1,0 +1,20 @@
+{
+    "name": "SiliconeHeart.Building",
+    "rootNamespace": "SiliconeHeart.Building",
+    "references": [
+        "GUID:b322c86cfa7034045b693289d257ad51",
+        "GUID:a025ebd29fa10ec43ba93dd5d911c81b",
+        "GUID:8d2132f434531f341a0921ddea0211e4",
+        "GUID:410fa83a3eebaad4eb7f6d6961af035b",
+        "GUID:6f7b2987d81f80d4baebf28d89fe445f"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,3 +1,4 @@
+using SiliconeHeart.Grid;
 using UnityEngine;
 
 public class BuildingGhost : MonoBehaviour
@@ -10,46 +11,47 @@ public class BuildingGhost : MonoBehaviour
 
     private BuildingData _currentBuildingData;
     private SpriteRenderer _renderer;
-    private GridSystem _gridSystem;
-    private InputHandler _inputHandler;
 
-    public void Initialize(BuildingData data, GridSystem gridSystem, InputHandler inputHandler)
+    public void Initialize(BuildingData data)
     {
         _renderer = GetComponent<SpriteRenderer>();
 
         _currentBuildingData = data;
-        _gridSystem = gridSystem;
 
         _renderer.sprite = _currentBuildingData.BuildingGhostSprite;
 
-        _inputHandler = inputHandler;
+        InputHandler inputHandler = ServiceLocator.Current.Get<InputHandler>();
 
-        _inputHandler.mouseMoved += UpdatePosition;
+        inputHandler.mouseMoved += UpdatePosition;
 
-        UpdatePosition(_inputHandler.GetMousePosition());
+        UpdatePosition(inputHandler.GetMousePosition());
     }
 
     private void OnDestroy()
     {
-        _inputHandler.mouseMoved -= UpdatePosition;
+        InputHandler inputHandler = ServiceLocator.Current.Get<InputHandler>();
+
+        inputHandler.mouseMoved -= UpdatePosition;
     }
 
     private void UpdatePosition(Vector2 move)
     {
+        var gridService = ServiceLocator.Current.Get<GridService>();
+
         Vector2 worldPos = Camera.main.ScreenToWorldPoint(move);
 
-        Vector2Int gridPos = _gridSystem.WorldToGridPosition(worldPos);
+        Vector2Int gridPos = gridService.WorldToGridPosition(worldPos);
 
         Vector2 NewPosition = new Vector2(
-            Mathf.RoundToInt(gridPos.x * _gridSystem.GridCellSize),
-            Mathf.RoundToInt(gridPos.y * _gridSystem.GridCellSize)
+            Mathf.RoundToInt(gridPos.x * gridService.GridCellSize),
+            Mathf.RoundToInt(gridPos.y * gridService.GridCellSize)
             );
 
         if ((Vector2)transform.position != NewPosition)
         {
             transform.position = NewPosition;
 
-            _isValid = _gridSystem.IsAreaFree(gridPos, _currentBuildingData);
+            _isValid = gridService.IsAreaFree(gridPos, _currentBuildingData.Size);
 
             SetValidity();
         }        

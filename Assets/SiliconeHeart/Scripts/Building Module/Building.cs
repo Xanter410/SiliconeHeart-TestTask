@@ -1,11 +1,13 @@
-using UnityEngine;
-
-public class Building : MonoBehaviour
+public class Building
 {
-    public BuildingData Data { get; private set; }
+    public string DataId { get; private set; }
+    public float PositionX;
+    public float PositionY;
 
-    public void Initialize(BuildingData data)
+    public Building(string dataId, float positionX, float positionY)
     {
-        Data = data;
+        DataId = dataId;
+        PositionX = positionX;
+        PositionY = positionY;
     }
 }

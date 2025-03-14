@@ -1,0 +1,17 @@
+{
+    "name": "SiliconeHeart.UI",
+    "rootNamespace": "SiliconeHeart.UI",
+    "references": [
+        "SiliconeHeart.Data",
+        "Utils.ServiceLocator"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

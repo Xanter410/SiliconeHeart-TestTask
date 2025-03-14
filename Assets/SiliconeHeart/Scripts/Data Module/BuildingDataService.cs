@@ -1,19 +1,19 @@
 using System.Collections.Generic;
-using UnityEngine;
+using Utils.ServiceLocator;
 
-public class BuildingDataService : MonoBehaviour
+public class BuildingDataService : IService
 {
-    [SerializeField] private List<BuildingData> _buildingsData;
-
     private Dictionary<string, BuildingData> _buildingsDataMap;
-
-    public void Initialize()
+    private List<BuildingData> _buildingsData;
+    public BuildingDataService(List<BuildingData> buildingsData)
     {
+        _buildingsData = buildingsData;
+
         _buildingsDataMap = new Dictionary<string, BuildingData>();
 
         foreach (var buildingData in _buildingsData)
         {
-            _buildingsDataMap[buildingData.ID] = buildingData;
+            _buildingsDataMap[buildingData.Id] = buildingData;
         }
     }
 

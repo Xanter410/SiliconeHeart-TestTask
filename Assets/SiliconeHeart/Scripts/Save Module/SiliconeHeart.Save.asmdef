@@ -1,0 +1,16 @@
+{
+    "name": "SiliconeHeart.Save",
+    "rootNamespace": "SiliconeHeart.Save",
+    "references": [
+        "GUID:6f7b2987d81f80d4baebf28d89fe445f"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,54 +1,54 @@
+using SiliconeHeart.Grid;
 using UnityEngine;
 
 public class DeletingMarker : MonoBehaviour
 {
     [SerializeField] private Material _deletedMaterial;
 
-    private GridSystem _gridSystem;
-    private InputHandler _inputHandler;
+    private BuildingSystem _buildingManager;
 
     private Building _currentBuilding;
     private SpriteRenderer _currentSpriteBuilding;
     private Material _baseMaterial;
 
-    public void Initialize(GridSystem gridSystem, InputHandler inputHandler)
+    public void Initialize(BuildingSystem buildingManager)
     {
-        _gridSystem = gridSystem;
-
-        _inputHandler = inputHandler;
+        _buildingManager = buildingManager;
     }
 
     private void OnDestroy()
     {
-        _inputHandler.mouseMoved -= CheckPosition;
+        ServiceLocator.Current.Get<InputHandler>().mouseMoved -= CheckPosition;
     }
 
     public void SetEnabled(bool enabled)
     {
         if (enabled)
         {
-            _inputHandler.mouseMoved += CheckPosition;
+            ServiceLocator.Current.Get<InputHandler>().mouseMoved += CheckPosition;
         }
         else
         {
-            _inputHandler.mouseMoved -= CheckPosition;
+            ServiceLocator.Current.Get<InputHandler>().mouseMoved -= CheckPosition;
         }
     }
 
     private void CheckPosition(Vector2 move)
     {
+        var gridSevice = ServiceLocator.Current.Get<GridService>();
+
         Vector2 worldPos = Camera.main.ScreenToWorldPoint(move);
 
-        Vector2Int gridPos = _gridSystem.WorldToGridPosition(worldPos);
+        Vector2Int gridPos = gridSevice.WorldToGridPosition(worldPos);
 
-        Building findedBuilding = _gridSystem.GetBuildingAtGridPosition(gridPos);
-
-        if (findedBuilding != null && findedBuilding != _currentBuilding)
+        if (gridSevice.TryGetObjectAtGridPosition(gridPos, out object findedBuilding))
         {
-            MarkBuilding(findedBuilding);
+            if ((Building)findedBuilding != _currentBuilding)
+            {
+                MarkBuilding((Building)findedBuilding);
+            }
         }
-
-        if (findedBuilding == null)
+        else
         {
             UnmarkOldBuilding();
         }
@@ -59,7 +59,10 @@ public class DeletingMarker : MonoBehaviour
         UnmarkOldBuilding();
 
         _currentBuilding = findedBuilding;
-        _currentSpriteBuilding = _currentBuilding.GetComponent<SpriteRenderer>();
+
+        var gameObject = _buildingManager.GetGameObjectByBuilding(_currentBuilding);
+
+        _currentSpriteBuilding = gameObject.GetComponent<SpriteRenderer>();
 
         _baseMaterial = _currentSpriteBuilding.material;
         _currentSpriteBuilding.material = _deletedMaterial;

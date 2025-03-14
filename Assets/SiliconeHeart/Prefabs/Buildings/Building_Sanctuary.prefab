@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6919472695412868589}
-  - component: {fileID: 5045854651051093487}
   - component: {fileID: 7478505105468161020}
   m_Layer: 7
   m_Name: Building_Sanctuary
@@ -33,18 +32,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5045854651051093487
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1888944057625255989}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 283413474e565564aa2d387cd5b64bb6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!212 &7478505105468161020
 SpriteRenderer:
   m_ObjectHideFlags: 0

@@ -1,9 +1,8 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIManager : MonoBehaviour
+public class UIGameplaySystem : MonoBehaviour
 {
     [Header("Building Selection")]
     [SerializeField] private RectTransform _BuildingButtonsContainer;
@@ -19,14 +18,16 @@ public class UIManager : MonoBehaviour
     private BuildingButton _selectedBuildingButton;
     private BuildingData _selectedBuildingData;
 
-    public void Initialize(BuildingDataService buildingDataService)
+    public void Initialize()
     {
-        SetupBuildingButtons(buildingDataService);
+        SetupBuildingButtons();
         SetupActionButtons();
     }
 
-    private void SetupBuildingButtons(BuildingDataService buildingDataService)
+    private void SetupBuildingButtons()
     {
+        BuildingDataService buildingDataService = ServiceLocator.Current.Get<BuildingDataService>();
+
         foreach (var buildingData in buildingDataService.GetAllBuildingsData())
         {
             BuildingButton newButton = Instantiate(_buildingButtonPrefab, _BuildingButtonsContainer);

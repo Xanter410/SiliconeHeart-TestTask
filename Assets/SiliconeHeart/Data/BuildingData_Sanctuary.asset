@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93a6cf024fb1ce94298c928edd6fcbb9, type: 3}
   m_Name: BuildingData_Sanctuary
   m_EditorClassIdentifier: 
-  ID: building_sanctuary
+  Id: building_sanctuary
   Prefab: {fileID: 1888944057625255989, guid: ccb46d10d80d87a448326ce139056313, type: 3}
   BuildingGhostSprite: {fileID: 21300000, guid: ccc6e99e601ee6a4c81043a8242b64ac, type: 3}
   Size: {x: 7, y: 7}

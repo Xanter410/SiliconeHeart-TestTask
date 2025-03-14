@@ -1,27 +1,24 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using Utils.ServiceLocator;
 
-public class InputHandler : MonoBehaviour
+public class InputHandler : IService
 {
     public event Action<Vector2> mouseMoved;
     public event Action leftClick;
 
     private InputActionAssetMap _inputAction;
-    private bool _isPointerOverUI;
 
-    public void Initialize()
+    public InputHandler()
     {
         _inputAction = new InputActionAssetMap();
 
         SetupInputActions();
 
         _inputAction.Enable();
-    }
-
-    private void Update()
-    {
-        _isPointerOverUI = IsPointerOverUI();
     }
 
     public Vector2 GetMousePosition()
@@ -35,16 +32,10 @@ public class InputHandler : MonoBehaviour
 
         _inputAction.Mouse.LeftClick.started += _ => HandleLeftClick();
     }
-    private void OnDestroy()
-    {
-        _inputAction.Mouse.Position.performed -= ctx => HandleMove(ctx.ReadValue<Vector2>());
-
-        _inputAction.Mouse.LeftClick.started -= _ => HandleLeftClick();
-    }
 
     private void HandleMove(Vector2 move)
     {
-        if (_isPointerOverUI)
+        if (IsPointerOverUI())
             return;
 
         mouseMoved?.Invoke(move);
@@ -52,7 +43,7 @@ public class InputHandler : MonoBehaviour
 
     private void HandleLeftClick()
     {
-        if (_isPointerOverUI)
+        if (IsPointerOverUI())
             return;
 
         leftClick?.Invoke();
@@ -60,6 +51,13 @@ public class InputHandler : MonoBehaviour
 
     private bool IsPointerOverUI()
     {
-        return EventSystem.current.IsPointerOverGameObject();
+        PointerEventData eventData = new PointerEventData(EventSystem.current)
+        {
+            position = Mouse.current.position.ReadValue()
+        };
+
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, results);
+        return results.Count > 0;
     }
 }
