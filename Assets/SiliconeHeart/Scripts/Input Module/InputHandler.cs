@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using Utils.ServiceLocator;
 
 namespace SiliconeHeart.Input
 {
-    public class InputHandler : IService
+    public class InputHandler : IInput
     {
-        public event Action<Vector2> mouseMoved;
-        public event Action leftClick;
+        public event Action<Vector2> MouseMoved;
+        public event Action LeftClick;
 
-        private InputActionAssetMap _inputAction;
+        private readonly InputActionAssetMap _inputAction; 
 
         public InputHandler()
         {
@@ -38,27 +37,31 @@ namespace SiliconeHeart.Input
         private void HandleMove(Vector2 move)
         {
             if (IsPointerOverUI())
+            {
                 return;
+            }
 
-            mouseMoved?.Invoke(move);
+            MouseMoved?.Invoke(move);
         }
 
         private void HandleLeftClick()
         {
             if (IsPointerOverUI())
+            {
                 return;
+            }
 
-            leftClick?.Invoke();
+            LeftClick?.Invoke();
         }
 
         private bool IsPointerOverUI()
         {
-            PointerEventData eventData = new PointerEventData(EventSystem.current)
+            PointerEventData eventData = new(EventSystem.current)
             {
                 position = Mouse.current.position.ReadValue()
             };
 
-            List<RaycastResult> results = new List<RaycastResult>();
+            List<RaycastResult> results = new();
             EventSystem.current.RaycastAll(eventData, results);
             return results.Count > 0;
         }

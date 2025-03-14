@@ -9,7 +9,7 @@ namespace SiliconeHeart.Building
     {
         public int ID { get; }
 
-        private BuildingStateMachine _buildingStateMachine;
+        private readonly BuildingStateMachine _buildingStateMachine;
 
         public IdleState(int id, BuildingStateMachine buildingStateMachine)
         {
@@ -20,13 +20,13 @@ namespace SiliconeHeart.Building
 
         public void Enter()
         {
-            ServiceLocator.Current.Get<UIGameplayService>().placeButtonClicked += OnPlaceButtonClicked;
-            ServiceLocator.Current.Get<UIGameplayService>().deleteButtonClicked += OnDeleteButtonClicked;
+            ServiceLocator.Current.Get<IBuildingUICallbacks>().PlaceButtonClicked += OnPlaceButtonClicked;
+            ServiceLocator.Current.Get<IBuildingUICallbacks>().DeleteButtonClicked += OnDeleteButtonClicked;
         }
         public void Exit()
         {
-            ServiceLocator.Current.Get<UIGameplayService>().placeButtonClicked -= OnPlaceButtonClicked;
-            ServiceLocator.Current.Get<UIGameplayService>().deleteButtonClicked -= OnDeleteButtonClicked;
+            ServiceLocator.Current.Get<IBuildingUICallbacks>().PlaceButtonClicked -= OnPlaceButtonClicked;
+            ServiceLocator.Current.Get<IBuildingUICallbacks>().DeleteButtonClicked -= OnDeleteButtonClicked;
         }
         public void FixedUpdate()
         {

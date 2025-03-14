@@ -12,10 +12,10 @@ namespace SiliconeHeart.Building
     {
         public int ID { get; }
 
-        private BuildingStateMachine _buildingStateMachine;
-        private BuildingContainer _buidlingContainer;
+        private readonly BuildingStateMachine _buildingStateMachine;
+        private readonly BuildingContainer _buidlingContainer;
 
-        private DeletingMarker _deletingMarker;
+        private readonly DeletingMarker _deletingMarker;
 
         public DeconstructState(
             int id, 
@@ -33,17 +33,17 @@ namespace SiliconeHeart.Building
 
         public void Enter()
         {
-            ServiceLocator.Current.Get<InputHandler>().leftClick += HandleAction;
-            ServiceLocator.Current.Get<UIGameplayService>().placeButtonClicked += OnPlaceButtonClicked;
-            ServiceLocator.Current.Get<UIGameplayService>().deleteButtonClicked += OnDeleteButtonClicked;
+            ServiceLocator.Current.Get<IInput>().LeftClick += HandleAction;
+            ServiceLocator.Current.Get<IBuildingUICallbacks>().PlaceButtonClicked += OnPlaceButtonClicked;
+            ServiceLocator.Current.Get<IBuildingUICallbacks>().DeleteButtonClicked += OnDeleteButtonClicked;
 
             _deletingMarker.SetEnabled(true);
         }
         public void Exit()
         {
-            ServiceLocator.Current.Get<InputHandler>().leftClick -= HandleAction;
-            ServiceLocator.Current.Get<UIGameplayService>().placeButtonClicked -= OnPlaceButtonClicked;
-            ServiceLocator.Current.Get<UIGameplayService>().deleteButtonClicked -= OnDeleteButtonClicked;
+            ServiceLocator.Current.Get<IInput>().LeftClick -= HandleAction;
+            ServiceLocator.Current.Get<IBuildingUICallbacks>().PlaceButtonClicked -= OnPlaceButtonClicked;
+            ServiceLocator.Current.Get<IBuildingUICallbacks>().DeleteButtonClicked -= OnDeleteButtonClicked;
             
             _deletingMarker.SetEnabled(false);
         }
@@ -74,17 +74,17 @@ namespace SiliconeHeart.Building
 
         private void TryDeleteBuilding()
         {
-            InputHandler inputHandler = ServiceLocator.Current.Get<InputHandler>();
+            IInput inputHandler = ServiceLocator.Current.Get<IInput>();
 
             Vector2 mouseWorldPos = Camera.main.ScreenToWorldPoint(inputHandler.GetMousePosition());
 
-            var gridService = ServiceLocator.Current.Get<GridService>();
+            GridService gridService = ServiceLocator.Current.Get<GridService>();
 
             Vector2Int gridPositionUnderMouse = gridService.WorldToGridPosition(mouseWorldPos);
 
             if (!gridService.IsAreaFree(gridPositionUnderMouse))
             {
-                gridService.TryGetObjectAtGridPosition(gridPositionUnderMouse, out object building);
+                _ = gridService.TryGetObjectAtGridPosition(gridPositionUnderMouse, out object building);
 
                 GameObject findedBuilding = _buidlingContainer.GetGameObjectByBuilding((Building)building);
 

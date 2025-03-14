@@ -4,14 +4,13 @@ using UnityEngine;
 
 namespace Utils.ServiceLocator
 {
-
     public class ServiceLocator
     {
         private ServiceLocator()
         {
         }
 
-        private readonly Dictionary<string, IService> _services = new Dictionary<string, IService>();
+        private readonly Dictionary<string, IService> _services = new();
 
         public static ServiceLocator Current { get; private set; }
 
@@ -55,7 +54,7 @@ namespace Utils.ServiceLocator
                 return;
             }
 
-            _services.Remove(key);
+            _ = _services.Remove(key);
         }
     }
 }

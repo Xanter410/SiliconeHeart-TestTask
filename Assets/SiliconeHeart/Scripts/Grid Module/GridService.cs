@@ -8,7 +8,7 @@ namespace SiliconeHeart.Grid
     {
         public int GridCellSize { get; private set; }
 
-        private Dictionary<Vector2Int, object> _occupiedCells = new Dictionary<Vector2Int, object>();
+        private readonly Dictionary<Vector2Int, object> _occupiedCells = new();
 
         public GridService(int gridCellSize = 1) 
         {
@@ -40,6 +40,7 @@ namespace SiliconeHeart.Grid
             {
                 return false;
             }
+
             return true;
         }
 
@@ -86,9 +87,9 @@ namespace SiliconeHeart.Grid
 
         public void FreeCells(object value)
         {
-            List<Vector2Int> keysToRemove = new List<Vector2Int>();
+            List<Vector2Int> keysToRemove = new();
 
-            foreach (var cell in _occupiedCells)
+            foreach (KeyValuePair<Vector2Int, object> cell in _occupiedCells)
             {
                 if (cell.Value == value)
                 {
@@ -96,9 +97,9 @@ namespace SiliconeHeart.Grid
                 }
             }
 
-            foreach (var key in keysToRemove)
+            foreach (Vector2Int key in keysToRemove)
             {
-                _occupiedCells.Remove(key);
+                _ = _occupiedCells.Remove(key);
             }
         }
     }

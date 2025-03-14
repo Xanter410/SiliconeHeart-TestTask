@@ -22,24 +22,24 @@ namespace SiliconeHeart.Building
 
         private void OnDestroy()
         {
-            ServiceLocator.Current.Get<InputHandler>().mouseMoved -= CheckPosition;
+            ServiceLocator.Current.Get<IInput>().MouseMoved -= CheckPosition;
         }
 
         public void SetEnabled(bool enabled)
         {
             if (enabled)
             {
-                ServiceLocator.Current.Get<InputHandler>().mouseMoved += CheckPosition;
+                ServiceLocator.Current.Get<IInput>().MouseMoved += CheckPosition;
             }
             else
             {
-                ServiceLocator.Current.Get<InputHandler>().mouseMoved -= CheckPosition;
+                ServiceLocator.Current.Get<IInput>().MouseMoved -= CheckPosition;
             }
         }
 
         private void CheckPosition(Vector2 move)
         {
-            var gridSevice = ServiceLocator.Current.Get<GridService>();
+            GridService gridSevice = ServiceLocator.Current.Get<GridService>();
 
             Vector2 worldPos = Camera.main.ScreenToWorldPoint(move);
 
@@ -64,7 +64,7 @@ namespace SiliconeHeart.Building
 
             _currentBuilding = findedBuilding;
 
-            var gameObject = _buildingContainer.GetGameObjectByBuilding(_currentBuilding);
+            GameObject gameObject = _buildingContainer.GetGameObjectByBuilding(_currentBuilding);
 
             _currentSpriteBuilding = gameObject.GetComponent<SpriteRenderer>();
 

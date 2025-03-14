@@ -6,7 +6,7 @@ using Utils.ServiceLocator;
 
 namespace SiliconeHeart.UI
 {
-    public class UIGameplayService : MonoBehaviour, IService
+    public class UIGameplayService : MonoBehaviour, IBuildingUICallbacks
     {
         [Header("Building Selection")]
         [SerializeField] private RectTransform _BuildingButtonsContainer;
@@ -16,9 +16,9 @@ namespace SiliconeHeart.UI
         [SerializeField] private Button _placeButton;
         [SerializeField] private Button _deleteButton;
 
-        public event Action<BuildingData> placeButtonClicked;
-        public event Action<BuildingData> selectedBuildingChanged;
-        public event Action deleteButtonClicked;
+        public event Action<BuildingData> PlaceButtonClicked;
+        public event Action<BuildingData> SelectedBuildingChanged;
+        public event Action DeleteButtonClicked;
 
         private BuildingButton _selectedBuildingButton;
         private BuildingData _selectedBuildingData;
@@ -31,9 +31,9 @@ namespace SiliconeHeart.UI
 
         private void SetupBuildingButtons()
         {
-            BuildingDataService buildingDataService = ServiceLocator.Current.Get<BuildingDataService>();
+            IBuildingDataService buildingDataService = ServiceLocator.Current.Get<IBuildingDataService>();
 
-            foreach (var buildingData in buildingDataService.GetAllBuildingsData())
+            foreach (BuildingData buildingData in buildingDataService.GetAllBuildingsData())
             {
                 BuildingButton newButton = Instantiate(_buildingButtonPrefab, _BuildingButtonsContainer);
                 newButton.Initialize(buildingData, OnBuildingSelected);
@@ -50,28 +50,28 @@ namespace SiliconeHeart.UI
             _selectedBuildingData = data;
             _selectedBuildingButton.SetSelected(true);
 
-            selectedBuildingChanged?.Invoke(_selectedBuildingData);
+            SelectedBuildingChanged?.Invoke(_selectedBuildingData);
         }
 
         private void SetupActionButtons()
         {
-            _placeButton.onClick.AddListener(PlaceButtonClicked);
+            _placeButton.onClick.AddListener(OnPlaceButtonClicked);
 
-            _deleteButton.onClick.AddListener(DeleteButtonClicked);
+            _deleteButton.onClick.AddListener(OnDeleteButtonClicked);
         }
 
-        private void PlaceButtonClicked()
+        private void OnPlaceButtonClicked()
         {
             if (_selectedBuildingData != null)
             {
-                placeButtonClicked?.Invoke(_selectedBuildingData);
+                PlaceButtonClicked?.Invoke(_selectedBuildingData);
             }
         }
 
-        private void DeleteButtonClicked()
+        private void OnDeleteButtonClicked()
         {
             DeselectBuilding();
-            deleteButtonClicked?.Invoke();
+            DeleteButtonClicked?.Invoke();
         }
 
         private void DeselectBuilding()

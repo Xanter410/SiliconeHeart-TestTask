@@ -1,21 +1,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Utils.ServiceLocator;
 
 namespace SiliconeHeart.Data
 {
-    public class BuildingDataService : IService
+    public class BuildingDataService : IBuildingDataService
     {
-        private Dictionary<string, BuildingData> _buildingsDataMap;
-        private List<BuildingData> _buildingsData;
-        public BuildingDataService()
+        private readonly Dictionary<string, BuildingData> _buildingsDataMap;
+        private readonly List<BuildingData> _buildingsData;
+        public BuildingDataService() 
         {
             _buildingsData = Resources.LoadAll<BuildingData>("BuildingData/").ToList();
 
             _buildingsDataMap = new Dictionary<string, BuildingData>();
 
-            foreach (var buildingData in _buildingsData)
+            foreach (BuildingData buildingData in _buildingsData)
             {
                 _buildingsDataMap[buildingData.Id] = buildingData;
             }
@@ -27,6 +26,7 @@ namespace SiliconeHeart.Data
             {
                 return _buildingsDataMap[id];
             }
+
             return null;
         }
 

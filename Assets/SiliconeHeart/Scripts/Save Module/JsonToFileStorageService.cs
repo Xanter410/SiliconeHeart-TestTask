@@ -31,8 +31,8 @@ namespace SiliconeHeart.Save
             {
                 using (var fileStream = new StreamReader(filePath))
                 {
-                    var json = fileStream.ReadToEnd();
-                    var data = JsonConvert.DeserializeObject<T>(json);
+                    string json = fileStream.ReadToEnd();
+                    T data = JsonConvert.DeserializeObject<T>(json);
 
                     callback.Invoke(data);
                 }

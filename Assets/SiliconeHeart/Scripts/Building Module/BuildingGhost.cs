@@ -23,29 +23,29 @@ namespace SiliconeHeart.Building
 
             _renderer.sprite = _currentBuildingData.BuildingGhostSprite;
 
-            InputHandler inputHandler = ServiceLocator.Current.Get<InputHandler>();
+            IInput inputHandler = ServiceLocator.Current.Get<IInput>();
 
-            inputHandler.mouseMoved += UpdatePosition;
+            inputHandler.MouseMoved += UpdatePosition;
 
             UpdatePosition(inputHandler.GetMousePosition());
         }
 
         private void OnDestroy()
         {
-            InputHandler inputHandler = ServiceLocator.Current.Get<InputHandler>();
+            IInput inputHandler = ServiceLocator.Current.Get<IInput>();
 
-            inputHandler.mouseMoved -= UpdatePosition;
+            inputHandler.MouseMoved -= UpdatePosition;
         }
 
         private void UpdatePosition(Vector2 move)
         {
-            var gridService = ServiceLocator.Current.Get<GridService>();
+            GridService gridService = ServiceLocator.Current.Get<GridService>();
 
             Vector2 worldPos = Camera.main.ScreenToWorldPoint(move);
 
             Vector2Int gridPos = gridService.WorldToGridPosition(worldPos);
 
-            Vector2 NewPosition = new Vector2(
+            Vector2 NewPosition = new(
                 Mathf.RoundToInt(gridPos.x * gridService.GridCellSize),
                 Mathf.RoundToInt(gridPos.y * gridService.GridCellSize)
                 );

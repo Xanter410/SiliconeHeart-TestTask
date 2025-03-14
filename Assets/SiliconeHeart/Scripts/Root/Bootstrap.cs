@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using SiliconeHeart.Building;
 using SiliconeHeart.Data;
 using SiliconeHeart.Grid;
@@ -8,48 +7,49 @@ using SiliconeHeart.UI;
 using UnityEngine;
 using Utils.ServiceLocator;
 
-public class Bootstrap : MonoBehaviour
+namespace SiliconeHeart.Root
 {
-    [SerializeField] private UIGameplayService _uiService;
-    [SerializeField] private BuildingSystem _buildingSystem;
-
-    private void Awake()
+    public class Bootstrap : MonoBehaviour
     {
-        ValidateDependencies();
+        [SerializeField] private UIGameplayService _uiService;
+        [SerializeField] private BuildingSystem _buildingSystem;
 
-        RegisterServices();
-
-        InitializeSystems();
-    }
-
-    private void ValidateDependencies()
-    {
-        if (_uiService == null ||
-            _buildingSystem == null
-            )
+        private void Awake()
         {
-            Debug.LogError("Bootstrap: Missing system dependencies!");
+            ValidateDependencies();
+            RegisterServices();
+            InitializeSystems();
         }
-    }
 
-    private void RegisterServices()
-    {
-        ServiceLocator.Initialize();
+        private void ValidateDependencies()
+        {
+            if (_uiService == null ||
+                _buildingSystem == null
+                )
+            {
+                Debug.LogError("Bootstrap: Missing system dependencies!");
+            }
+        }
 
-        ServiceLocator.Current.Register<BuildingDataService>(new BuildingDataService());
+        private void RegisterServices()
+        {
+            ServiceLocator.Initialize();
 
-        ServiceLocator.Current.Register<IStorage>(new JsonToFileStorageService());
+            ServiceLocator.Current.Register<IBuildingDataService>(new BuildingDataService());
 
-        ServiceLocator.Current.Register<GridService>(new GridService());
+            ServiceLocator.Current.Register<IStorage>(new JsonToFileStorageService());
 
-        ServiceLocator.Current.Register<InputHandler>(new InputHandler());
+            ServiceLocator.Current.Register<GridService>(new GridService());
 
-        _uiService.Initialize();
-        ServiceLocator.Current.Register<UIGameplayService>(_uiService);
-    }
+            ServiceLocator.Current.Register<IInput>(new InputHandler());
 
-    private void InitializeSystems()
-    {
-        _buildingSystem.Initialize();
+            _uiService.Initialize();
+            ServiceLocator.Current.Register<IBuildingUICallbacks>(_uiService);
+        }
+
+        private void InitializeSystems()
+        {
+            _buildingSystem.Initialize();
+        }
     }
 }

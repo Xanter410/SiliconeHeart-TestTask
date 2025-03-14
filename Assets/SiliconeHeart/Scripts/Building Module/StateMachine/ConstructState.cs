@@ -11,11 +11,11 @@ namespace SiliconeHeart.Building
     public class ConstructState : IState
     {
         public int ID { get; }
-        private BuildingStateMachine _buildingStateMachine;
-        private BuildingContainer _buidlingContainer;
+        private readonly BuildingStateMachine _buildingStateMachine;
+        private readonly BuildingContainer _buidlingContainer;
 
-        private GameObject _buildingGhostPrefab;
-        private GameObject _tilemapBuildingGrid;
+        private readonly GameObject _buildingGhostPrefab;
+        private readonly GameObject _tilemapBuildingGrid;
 
         private GameObject _currentGhostGameObject;
         private BuildingGhost _currentGhost;
@@ -38,10 +38,10 @@ namespace SiliconeHeart.Building
 
         public void Enter()
         {
-            ServiceLocator.Current.Get<InputHandler>().leftClick += HandleAction;
-            ServiceLocator.Current.Get<UIGameplayService>().placeButtonClicked += OnPlaceButtonClicked;
-            ServiceLocator.Current.Get<UIGameplayService>().deleteButtonClicked += OnDeleteButtonClicked;
-            ServiceLocator.Current.Get<UIGameplayService>().selectedBuildingChanged += OnSelectedBuildingChanged;
+            ServiceLocator.Current.Get<IInput>().LeftClick += HandleAction;
+            ServiceLocator.Current.Get<IBuildingUICallbacks>().PlaceButtonClicked += OnPlaceButtonClicked;
+            ServiceLocator.Current.Get<IBuildingUICallbacks>().DeleteButtonClicked += OnDeleteButtonClicked;
+            ServiceLocator.Current.Get<IBuildingUICallbacks>().SelectedBuildingChanged += OnSelectedBuildingChanged;
 
             CreateGhost();
 
@@ -49,10 +49,10 @@ namespace SiliconeHeart.Building
         }
         public void Exit()
         {
-            ServiceLocator.Current.Get<InputHandler>().leftClick -= HandleAction;
-            ServiceLocator.Current.Get<UIGameplayService>().placeButtonClicked -= OnPlaceButtonClicked;
-            ServiceLocator.Current.Get<UIGameplayService>().deleteButtonClicked -= OnDeleteButtonClicked;
-            ServiceLocator.Current.Get<UIGameplayService>().selectedBuildingChanged -= OnSelectedBuildingChanged;
+            ServiceLocator.Current.Get<IInput>().LeftClick -= HandleAction;
+            ServiceLocator.Current.Get<IBuildingUICallbacks>().PlaceButtonClicked -= OnPlaceButtonClicked;
+            ServiceLocator.Current.Get<IBuildingUICallbacks>().DeleteButtonClicked -= OnDeleteButtonClicked;
+            ServiceLocator.Current.Get<IBuildingUICallbacks>().SelectedBuildingChanged -= OnSelectedBuildingChanged;
 
             _buildingStateMachine.currentBuildingData = null;
 
@@ -100,7 +100,9 @@ namespace SiliconeHeart.Building
         private void TryPlaceBuilding()
         {
             if (!_currentGhost.IsValid)
+            {
                 return;
+            }
 
             GameObject newBuilding = Object.Instantiate(
                 _buildingStateMachine.currentBuildingData.Prefab,
@@ -120,7 +122,7 @@ namespace SiliconeHeart.Building
 
         private void UpdateGrid(GameObject newBuilding, Building buildingModel)
         {
-            var gridService = ServiceLocator.Current.Get<GridService>();
+            GridService gridService = ServiceLocator.Current.Get<GridService>();
 
             Vector2Int gridPos = gridService.WorldToGridPosition(newBuilding.transform.position);
 

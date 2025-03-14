@@ -1,4 +1,3 @@
-
 namespace SiliconeHeart.Building
 {
     public class Building
